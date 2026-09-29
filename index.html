@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8f7f2">
+    <title>Morning Oven | 재고 관리</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <section class="login-page" id="login-page">
+        <div class="login-art">
+            <div class="brand-mark">MORNING OVEN</div>
+            <div class="login-copy">
+                <span class="eyebrow">BAKERY INVENTORY</span>
+                <h1>매일 굽는 빵,<br>꼼꼼한 재고.</h1>
+                <p>우리 빵집의 상품과 재료를 한눈에 관리하세요.</p>
+            </div>
+            <span class="art-caption">FRESH FROM OUR OVEN</span>
+        </div>
+        <div class="login-panel">
+            <form class="login-form" id="login-form">
+                <span class="eyebrow">BAKERY INVENTORY</span>
+                <h2>다시 오셨네요</h2>
+                <p>관리자 계정으로 로그인해 주세요.</p>
+                <label class="field">
+                    <span>아이디</span>
+                    <input name="username" autocomplete="username" required autofocus>
+                </label>
+                <label class="field">
+                    <span>비밀번호</span>
+                    <input name="password" type="password" autocomplete="current-password" required>
+                </label>
+                <button class="button primary login-submit" type="submit">로그인</button>
+                <p class="form-message" id="login-message" role="alert"></p>
+            </form>
+        </div>
+    </section>
+
+    <div class="app-shell" id="app-shell" hidden>
+        <header class="topbar">
+            <a class="topbrand" href="#" aria-label="Morning Oven 홈">
+                <span class="brand-icon" aria-hidden="true">M</span>
+                <span>Morning Oven</span>
+            </a>
+            <div class="top-actions">
+                <span class="user-label">관리자</span>
+                <button class="text-button" id="logout-button" type="button">로그아웃</button>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <div class="page-heading">
+                <div>
+                    <span class="eyebrow">INVENTORY</span>
+                    <h1>재고 관리</h1>
+                    <p>상품과 재료의 입고 현황을 관리합니다.</p>
+                </div>
+                <time class="today" id="today"></time>
+            </div>
+
+            <section class="stats" aria-label="재고 요약">
+                <div class="stat">
+                    <span>등록 상품</span>
+                    <strong id="product-count">0<small>종</small></strong>
+                </div>
+                <div class="stat alert">
+                    <span>안전재고 이하</span>
+                    <strong id="low-count">0<small>종</small></strong>
+                </div>
+            </section>
+
+            <p class="notice" id="notice" role="status" hidden></p>
+
+            <div class="workspace">
+                <section class="form-panel" aria-labelledby="form-title">
+                    <div class="panel-heading">
+                        <h2 id="form-title">상품 등록</h2>
+                    </div>
+                    <form id="product-form">
+                        <input type="hidden" name="id">
+                        <div class="form-grid">
+                            <label class="field full">
+                                <span>상품명 <b>*</b></span>
+                                <input name="name" required maxlength="100" placeholder="예: 우유 식빵">
+                            </label>
+                            <label class="field">
+                                <span>분류</span>
+                                <select name="category">
+                                    <option>빵·완제품</option>
+                                    <option>원재료</option>
+                                    <option>유제품</option>
+                                    <option>포장재</option>
+                                    <option>음료</option>
+                                    <option>기타</option>
+                                </select>
+                            </label>
+                            <label class="field">
+                                <span>관리 코드</span>
+                                <input name="code" maxlength="40" placeholder="예: BR-001">
+                            </label>
+                            <label class="field">
+                                <span>현재 수량 <b>*</b></span>
+                                <input name="quantity" type="number" min="0" step="1" value="0" required>
+                            </label>
+                            <label class="field">
+                                <span>단위</span>
+                                <input name="unit" maxlength="20" value="개" placeholder="개, kg, 봉">
+                            </label>
+                            <label class="field">
+                                <span>안전재고 <b>*</b></span>
+                                <input name="minimum" type="number" min="0" step="1" value="0" required>
+                            </label>
+                            <label class="field">
+                                <span>단가 (원) <b>*</b></span>
+                                <input name="price" type="number" min="0" step="1" value="0" required>
+                            </label>
+                            <label class="field full">
+                                <span>거래처</span>
+                                <input name="supplier" maxlength="100">
+                            </label>
+                            <label class="field full">
+                                <span>유통기한</span>
+                                <input name="expiry" type="date">
+                            </label>
+                            <label class="field full">
+                                <span>메모</span>
+                                <input name="memo" maxlength="200">
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button class="button primary" id="save-button" type="submit">상품 등록</button>
+                            <button class="button secondary" id="cancel-button" type="button" hidden>취소</button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="inventory" aria-labelledby="inventory-title">
+                    <div class="inventory-head">
+                        <h2 id="inventory-title">상품 목록 <span id="visible-count">(0)</span></h2>
+                        <form class="search" id="search-form" role="search">
+                            <label class="visually-hidden" for="search-input">상품 검색</label>
+                            <input id="search-input" name="query" placeholder="상품명, 분류, 코드, 거래처 검색">
+                            <button class="button search-button" type="submit">검색</button>
+                            <button class="button clear-search" id="clear-search" type="button" aria-label="검색어 지우기" title="검색어 지우기">×</button>
+                        </form>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col">상품</th>
+                                    <th scope="col">분류</th>
+                                    <th scope="col">재고</th>
+                                    <th scope="col">안전재고</th>
+                                    <th scope="col">단가</th>
+                                    <th scope="col">유통기한</th>
+                                    <th scope="col">관리</th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-list"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
