@@ -47,6 +47,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .brand-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: white; background: var(--green); font: 17px var(--serif); }
 .top-actions { display: flex; align-items: center; gap: 16px; color: var(--muted); }
 .text-button { border: 0; padding: 7px 0; color: var(--green); background: transparent; font-weight: 700; cursor: pointer; }
+.password-dialog { width: min(420px, calc(100vw - 32px)); border: 1px solid var(--line); border-radius: 3px; padding: 22px; color: var(--ink); background: var(--paper); }
+.password-dialog::backdrop { background: #28272080; }
+.password-dialog h2 { margin: 0 0 18px; font: 23px var(--serif); }
+.password-dialog .form-message { min-height: 21px; }
 .page-content { width: min(1320px, 92vw); margin: 34px auto 60px; }
 .page-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 23px; }
 .page-heading h1 { margin: 3px 0 0; font: 32px var(--serif); }

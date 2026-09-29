@@ -1,5 +1,6 @@
 const LOGIN_ID = 'admin';
 const LOGIN_PASSWORD = '1234';
+const LOGIN_PASSWORD_STORAGE_KEY = 'morning-oven-admin-password-v1';
 const STORAGE_KEY = 'morning-oven-inventory-v1';
 const SALES_STORAGE_KEY = 'morning-oven-sales-v1';
 
@@ -34,6 +35,10 @@ function loadSales() {
     } catch {
         return [];
     }
+}
+
+function getLoginPassword() {
+    return localStorage.getItem(LOGIN_PASSWORD_STORAGE_KEY) || LOGIN_PASSWORD;
 }
 
 function saveProducts() {
@@ -322,13 +327,49 @@ function showApp() {
 loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(loginForm);
-    if (formData.get('username') !== LOGIN_ID || formData.get('password') !== LOGIN_PASSWORD) {
+    if (formData.get('username') !== LOGIN_ID || formData.get('password') !== getLoginPassword()) {
         loginMessage.textContent = '아이디 또는 비밀번호를 확인해 주세요.';
         return;
     }
     sessionStorage.setItem('morning-oven-authenticated', 'true');
     loginMessage.textContent = '';
     showApp();
+});
+
+const passwordDialog = document.querySelector('#password-dialog');
+const passwordForm = document.querySelector('#password-form');
+const passwordMessage = document.querySelector('#password-message');
+
+document.querySelector('#change-password-button').addEventListener('click', () => {
+    passwordForm.reset();
+    passwordMessage.textContent = '';
+    passwordDialog.showModal();
+    passwordForm.elements.currentPassword.focus();
+});
+
+document.querySelector('#cancel-password-change').addEventListener('click', () => passwordDialog.close());
+
+passwordForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(passwordForm);
+    if (formData.get('currentPassword') !== getLoginPassword()) {
+        passwordMessage.textContent = '현재 비밀번호가 올바르지 않습니다.';
+        return;
+    }
+    if (formData.get('newPassword') !== formData.get('confirmPassword')) {
+        passwordMessage.textContent = '새 비밀번호가 서로 일치하지 않습니다.';
+        return;
+    }
+
+    try {
+        localStorage.setItem(LOGIN_PASSWORD_STORAGE_KEY, String(formData.get('newPassword')));
+    } catch {
+        passwordMessage.textContent = '브라우저 저장 공간에 비밀번호를 저장하지 못했습니다.';
+        return;
+    }
+
+    passwordDialog.close();
+    showNotice('관리자 비밀번호를 변경했습니다.');
 });
 
 document.querySelector('#logout-button').addEventListener('click', () => {
