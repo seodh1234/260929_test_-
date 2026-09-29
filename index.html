@@ -54,26 +54,31 @@
             <div class="page-heading">
                 <div>
                     <span class="eyebrow">INVENTORY</span>
-                    <h1>재고 관리</h1>
-                    <p>상품과 재료의 입고 현황을 관리합니다.</p>
+                    <h1 id="page-title">재고 관리</h1>
+                    <p id="page-description">상품과 재료의 입고 현황을 관리합니다.</p>
                 </div>
                 <time class="today" id="today"></time>
             </div>
 
-            <section class="stats" aria-label="재고 요약">
-                <div class="stat">
-                    <span>등록 상품</span>
-                    <strong id="product-count">0<small>종</small></strong>
-                </div>
-                <div class="stat alert">
-                    <span>안전재고 이하</span>
-                    <strong id="low-count">0<small>종</small></strong>
-                </div>
-            </section>
-
+            <nav class="view-tabs" aria-label="관리 메뉴">
+                <button class="view-tab active" id="inventory-tab" type="button" role="tab" aria-selected="true" aria-controls="inventory-view">재고 관리</button>
+                <button class="view-tab" id="sales-tab" type="button" role="tab" aria-selected="false" aria-controls="sales-view">판매 등록</button>
+            </nav>
             <p class="notice" id="notice" role="status" hidden></p>
 
-            <div class="workspace">
+            <section class="view-panel" id="inventory-view" role="tabpanel" aria-labelledby="inventory-tab">
+                <section class="stats" aria-label="재고 요약">
+                    <div class="stat">
+                        <span>등록 상품</span>
+                        <strong id="product-count">0<small>종</small></strong>
+                    </div>
+                    <div class="stat alert">
+                        <span>안전재고 이하</span>
+                        <strong id="low-count">0<small>종</small></strong>
+                    </div>
+                </section>
+
+                <div class="workspace">
                 <section class="form-panel" aria-labelledby="form-title">
                     <div class="panel-heading">
                         <h2 id="form-title">상품 등록</h2>
@@ -163,7 +168,66 @@
                         </table>
                     </div>
                 </section>
-            </div>
+                </div>
+            </section>
+
+            <section class="view-panel sales-view" id="sales-view" role="tabpanel" aria-labelledby="sales-tab" hidden>
+                <section class="stats" aria-label="오늘 판매 요약">
+                    <div class="stat">
+                        <span>오늘 매출</span>
+                        <strong id="sales-total">0<small>원</small></strong>
+                    </div>
+                    <div class="stat">
+                        <span>오늘 판매 건수</span>
+                        <strong id="sales-count">0<small>건</small></strong>
+                    </div>
+                </section>
+                <div class="sales-workspace">
+                    <section class="form-panel" aria-labelledby="sale-form-title">
+                        <div class="panel-heading"><h2 id="sale-form-title">판매 등록</h2></div>
+                        <form id="sale-form">
+                            <label class="field">
+                                <span>상품 *</span>
+                                <select id="sale-product" name="productId" required></select>
+                            </label>
+                            <p class="sale-stock" id="sale-stock">상품을 선택해 주세요.</p>
+                            <label class="field">
+                                <span>판매 수량 *</span>
+                                <input id="sale-quantity" name="quantity" type="number" min="1" step="1" value="1" required>
+                            </label>
+                            <label class="field">
+                                <span>판매 단가</span>
+                                <input id="sale-unit-price" name="unitPrice" type="text" value="0원" readonly>
+                            </label>
+                            <div class="sale-total-line">
+                                <span>결제 금액</span>
+                                <strong id="sale-total-preview">0원</strong>
+                            </div>
+                            <button class="button primary sale-submit" id="sale-submit" type="submit">판매 등록</button>
+                        </form>
+                    </section>
+                    <section class="sales-history" aria-labelledby="sales-history-title">
+                        <div class="inventory-head">
+                            <h2 id="sales-history-title">판매 내역 <span id="sales-visible-count">(0)</span></h2>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">판매 시각</th>
+                                        <th scope="col">상품</th>
+                                        <th scope="col">수량</th>
+                                        <th scope="col">단가</th>
+                                        <th scope="col">금액</th>
+                                        <th scope="col">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sales-list"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </section>
         </main>
     </div>
 </body>
