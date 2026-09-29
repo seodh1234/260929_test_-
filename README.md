@@ -2,6 +2,8 @@
 
 HTML, CSS, JavaScript로 만든 GitHub Pages용 정적 재고관리 앱입니다.
 
+배포 주소: <https://seodh1234.github.io/260929_test_-/>
+
 ## GitHub Pages 배포
 
 1. 이 저장소의 `main` 브랜치에 변경사항을 push합니다.
